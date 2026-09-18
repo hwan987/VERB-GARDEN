@@ -1,0 +1,6 @@
+{
+  "name": "Growing Your Verbs",
+  "description": "영어 동사의 과거형과 과거분사형을 쉽고 재밌게 누적하며 익힐 수 있는 게임",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

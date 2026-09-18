@@ -1,0 +1,82 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Plant pot at base -->
+    <path
+        android:fillColor="#D7CCC8"
+        android:pathData="M38,72 L70,72 L66,88 L42,88 Z" />
+    <path
+        android:fillColor="#8D6E63"
+        android:pathData="M36,68 L72,68 L70,73 L38,73 Z" />
+    <path
+        android:fillColor="#5D4037"
+        android:pathData="M41,71 L67,71 C67,73 41,73 41,71 Z" />
+        
+    <!-- Main stem -->
+    <path
+        android:fillColor="#81C784"
+        android:strokeColor="#388E3C"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:pathData="M54,70 Q52,52 54,38" />
+
+    <!-- Left leaf -->
+    <path
+        android:fillColor="#A5D6A7"
+        android:strokeColor="#2E7D32"
+        android:strokeWidth="1.5"
+        android:pathData="M53,56 C44,55 35,50 38,42 C46,42 51,48 53,56 Z" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#2E7D32"
+        android:strokeWidth="1.2"
+        android:pathData="M41,45 Q48,49 53,55" />
+
+    <!-- Right leaf -->
+    <path
+        android:fillColor="#A5D6A7"
+        android:strokeColor="#2E7D32"
+        android:strokeWidth="1.5"
+        android:pathData="M54,48 C63,46 71,40 68,33 C60,34 56,41 54,48 Z" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#2E7D32"
+        android:strokeWidth="1.2"
+        android:pathData="M65,36 Q59,42 54,47" />
+
+    <!-- Flower Petals -->
+    <!-- Top petal -->
+    <path
+        android:fillColor="#FF80AB"
+        android:pathData="M54,34 C50,25 58,25 54,34 Z" />
+    <!-- Top-left petal -->
+    <path
+        android:fillColor="#FF4081"
+        android:pathData="M54,34 C44,28 48,20 54,34 Z" />
+    <!-- Top-right petal -->
+    <path
+        android:fillColor="#FF4081"
+        android:pathData="M54,34 C64,28 60,20 54,34 Z" />
+    <!-- Bottom-left petal -->
+    <path
+        android:fillColor="#F50057"
+        android:pathData="M54,34 C43,38 43,48 54,34 Z" />
+    <!-- Bottom-right petal -->
+    <path
+        android:fillColor="#F50057"
+        android:pathData="M54,34 C65,38 65,48 54,34 Z" />
+
+    <!-- Flower center pistil -->
+    <path
+        android:fillColor="#FFD54F"
+        android:strokeColor="#FFA000"
+        android:strokeWidth="1.5"
+        android:pathData="M54,34 m-6,0 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0" />
+
+    <!-- Cute little sparkle -->
+    <path
+        android:fillColor="#FFF59D"
+        android:pathData="M69,22 L71,25 L74,27 L71,29 L69,32 L67,29 L64,27 L67,25 Z" />
+</vector>
