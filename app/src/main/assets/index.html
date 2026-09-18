@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Growing Your Verbs</title>
+  <style>
+    :root {
+      --bg: #F8FAF7;
+      --card-bg: #FFFFFF;
+      --primary: #2E7D32;
+      --primary-light: #E8F5E9;
+      --primary-hover: #1B5E20;
+      --text: #1F2937;
+      --text-muted: #6B7280;
+      --border: #E5E7EB;
+      --accent: #3B82F6;
+      --success: #16A34A;
+      --success-bg: #DCFCE7;
+      --danger: #DC2626;
+      --danger-bg: #FEE2E2;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-family);
+      line-height: 1.5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    #app {
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      min-height: 94vh;
+    }
+
+    /* Clean Modern Navbar */
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--card-bg);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+    .brand {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-btn {
+      background: none;
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+    .nav-btn:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    /* Typography */
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px 20px;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+      box-shadow: 0 4px 12px rgba(46, 125, 50, 0.25);
+    }
+    .btn-secondary {
+      background: #F3F4F6;
+      color: var(--text);
+      margin-top: 8px;
+    }
+    .btn-secondary:hover {
+      background: #E5E7EB;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--text);
+      margin-top: 8px;
+    }
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+    .btn-sound {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: none;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .btn-sound:hover {
+      background: #C8E6C9;
+    }
+
+    /* Plant Graphic (SVG Animation) */
+    .plant-visual {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 12px 0 20px;
+      padding: 16px;
+      background: linear-gradient(180deg, #F0FDF4 0%, #DCFCE7 100%);
+      border-radius: var(--radius-md);
+      min-height: 160px;
+    }
+    .plant-stage-badge {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.8);
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    /* Verb Display Section */
+    .verb-header {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .verb-title {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--primary-hover);
+      letter-spacing: -0.02em;
+    }
+    .verb-meaning {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    /* 3 Stage Progress Bar */
+    .stage-steps {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .step-item {
+      padding: 10px 8px;
+      text-align: center;
+      border-radius: var(--radius-md);
+      background: #F3F4F6;
+      border: 1px solid var(--border);
+      transition: all 0.3s;
+    }
+    .step-item.active {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+      font-weight: 700;
+    }
+    .step-item.completed {
+      background: var(--success-bg);
+      border-color: var(--success);
+      color: var(--success);
+      font-weight: 700;
+    }
+    .step-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: block;
+      color: var(--text-muted);
+    }
+    .step-word {
+      font-size: 0.95rem;
+      font-weight: 800;
+      margin-top: 2px;
+    }
+
+    /* Choices Section */
+    .choices-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 16px 0;
+    }
+    .choice-btn {
+      width: 100%;
+      padding: 14px 18px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      text-align: left;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--border);
+      background: var(--card-bg);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.15s ease;
+    }
+    .choice-btn:hover {
+      border-color: var(--primary);
+      background: #FAFAF9;
+    }
+    .choice-btn.correct {
+      background: var(--success-bg);
+      border-color: var(--success);
+      color: var(--success);
+    }
+    .choice-btn.wrong {
+      background: var(--danger-bg);
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    /* Feedback Banner */
+    .feedback-banner {
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-align: center;
+      margin-bottom: 12px;
+      display: none;
+    }
+    .feedback-banner.success {
+      display: block;
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid var(--success);
+    }
+    .feedback-banner.danger {
+      display: block;
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid var(--danger);
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      background: #F9FAFB;
+      padding: 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--primary);
+    }
+    .stat-title {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Garden / Review Grid */
+    .item-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 14px;
+      max-height: 480px;
+      overflow-y: auto;
+    }
+    .list-card {
+      background: #FAFAFA;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .list-verb-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--primary-hover);
+    }
+    .list-verb-forms {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: #E0E7FF;
+      color: #3730A3;
+    }
+
+    /* Hidden Utility */
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <!-- Top Navigation Bar -->
+  <header class="nav-bar">
+    <div class="brand" onclick="app.showHome()">
+      <span>🌱</span>
+      <span>Growing Your Verbs</span>
+    </div>
+    <div style="display:flex; gap:6px;">
+      <button class="nav-btn" onclick="app.showGarden()">🌿 화원</button>
+      <button class="nav-btn" onclick="app.showReview()">📝 오답</button>
+    </div>
+  </header>
+
+  <!-- View: HOME -->
+  <section id="view-home" class="card">
+    <h1 style="color: var(--primary);">불규칙 동사 정원 🌱</h1>
+    <p style="margin-bottom: 20px;">동사의 3단 변화(원형 → 과거형 → 과거분사)를 학습하며 나만의 디지털 식물들을 피워보세요. 군더더기 없는 깔끔한 웹 버전입니다.</p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="home-plant-count">0</div>
+        <div class="stat-title">활짝 핀 식물 수</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="home-mistake-count">0</div>
+        <div class="stat-title">복습할 오답 수</div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="app.startGame(false)">
+      <span>🚀</span>
+      <span>새로운 동사 학습 시작하기</span>
+    </button>
+    <button class="btn btn-secondary" onclick="app.showGarden()">
+      <span>🌸</span>
+      <span>키운 식물 화원 보러가기</span>
+    </button>
+    <button class="btn btn-outline" onclick="app.showReview()">
+      <span>📖</span>
+      <span>오답 노트 및 다시풀기</span>
+    </button>
+  </section>
+
+  <!-- View: GAME -->
+  <section id="view-game" class="card hidden">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <span class="badge" id="game-progress">동사 1 / 5</span>
+      <button class="btn-sound" onclick="app.speakCurrentWord()">
+        <span>🔊</span>
+        <span>발음 듣기</span>
+      </button>
+    </div>
+
+    <!-- Plant Animation Canvas/SVG -->
+    <div class="plant-visual">
+      <div class="plant-stage-badge" id="plant-stage-badge">씨앗 단계</div>
+      <div id="plant-svg-container">
+        <!-- Dynamic Plant SVG will render here -->
+      </div>
+    </div>
+
+    <!-- Target Verb Title & Meaning -->
+    <div class="verb-header">
+      <div class="verb-title" id="verb-base">go</div>
+      <div class="verb-meaning" id="verb-meaning">가다</div>
+    </div>
+
+    <!-- 3 Stage Indicator -->
+    <div class="stage-steps">
+      <div class="step-item completed" id="step-base">
+        <span class="step-label">동사원형</span>
+        <span class="step-word" id="step-base-word">go</span>
+      </div>
+      <div class="step-item active" id="step-past">
+        <span class="step-label">과거형 (새싹)</span>
+        <span class="step-word" id="step-past-word">?</span>
+      </div>
+      <div class="step-item" id="step-participle">
+        <span class="step-label">과거분사 (꽃)</span>
+        <span class="step-word" id="step-participle-word">?</span>
+      </div>
+    </div>
+
+    <!-- Question Prompt -->
+    <div style="font-weight: 700; font-size: 1rem; margin-bottom: 8px; color: var(--text);" id="game-question-text">
+      'go'의 알맞은 과거형을 골라보세요:
+    </div>
+
+    <!-- Feedback Banner -->
+    <div class="feedback-banner" id="feedback-banner"></div>
+
+    <!-- Multiple Choices List -->
+    <div class="choices-grid" id="choices-container"></div>
+
+    <!-- Next / Skip Control Button -->
+    <button class="btn btn-primary hidden" id="btn-next-step" onclick="app.advanceStep()">
+      <span>다음으로 넘어가기 →</span>
+    </button>
+    <button class="btn btn-outline" style="margin-top: 8px;" onclick="app.showHome()">
+      <span>학습 중단 및 나가기</span>
+    </button>
+  </section>
+
+  <!-- View: RESULT -->
+  <section id="view-result" class="card hidden">
+    <div style="text-align: center; margin-bottom: 20px;">
+      <div style="font-size: 3rem; margin-bottom: 8px;">🌸</div>
+      <h1 style="color: var(--primary);">학습 완료!</h1>
+      <p>오늘의 5개 동사를 모두 학습하여 화원에 식물들을 피웠습니다.</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="result-score">100</div>
+        <div class="stat-title">획득 점수</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="result-correct-count">5 / 5</div>
+        <div class="stat-title">정답 완료</div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="app.startGame(false)">
+      <span>🔁</span>
+      <span>새로운 세션 한 번 더하기</span>
+    </button>
+    <button class="btn btn-secondary" onclick="app.showGarden()">
+      <span>🌿</span>
+      <span>식물 화원 확인하기</span>
+    </button>
+    <button class="btn btn-outline" onclick="app.showHome()">
+      <span>🏠</span>
+      <span>홈으로 돌아가기</span>
+    </button>
+  </section>
+
+  <!-- View: GARDEN -->
+  <section id="view-garden" class="card hidden">
+    <h2>식물 도감 화원 🌿</h2>
+    <p>지금까지 올바르게 피워낸 동사 식물들의 목록입니다.</p>
+    <div class="item-list" id="garden-list"></div>
+    <button class="btn btn-secondary" style="margin-top: 16px;" onclick="app.showHome()">홈으로 돌아가기</button>
+  </section>
+
+  <!-- View: REVIEW -->
+  <section id="view-review" class="card hidden">
+    <h2>오답 복습 노트 📝</h2>
+    <p>학습 도중 헷갈렸던 동사들을 다시 복습할 수 있습니다.</p>
+    <div class="item-list" id="review-list"></div>
+    <div style="display:flex; gap: 8px; margin-top: 16px;">
+      <button class="btn btn-primary" id="btn-review-start" onclick="app.startReviewSession()">오답 다시 풀기</button>
+      <button class="btn btn-outline" onclick="app.clearMistakes()">기록 비우기</button>
+    </div>
+    <button class="btn btn-secondary" style="margin-top: 8px;" onclick="app.showHome()">홈으로 돌아가기</button>
+  </section>
+</div>
+
+<script>
+  // Complete 20 Elementary Irregular Verbs Dataset
+  const VERBS_DATA = [
+    { id: "go", base: "go", past: "went", pastParticiple: "gone", meaning: "가다", plant: "강낭콩 🌱", flowerColor: "#4CAF50", distractorsPast: ["goed", "gone", "goes"], distractorsParticiple: ["went", "goed", "going"] },
+    { id: "see", base: "see", past: "saw", pastParticiple: "seen", meaning: "보다", plant: "봉선화 🌺", flowerColor: "#E91E63", distractorsPast: ["seed", "seen", "sawed"], distractorsParticiple: ["saw", "seed", "seeing"] },
+    { id: "eat", base: "eat", past: "ate", pastParticiple: "eaten", meaning: "먹다", plant: "방울토마토 🍅", flowerColor: "#F44336", distractorsPast: ["eated", "eaten", "eats"], distractorsParticiple: ["ate", "eated", "eating"] },
+    { id: "take", base: "take", past: "took", pastParticiple: "taken", meaning: "가져가다 / 타다", plant: "해바라기 🌻", flowerColor: "#FFC107", distractorsPast: ["taked", "taken", "tooked"], distractorsParticiple: ["took", "taked", "taking"] },
+    { id: "give", base: "give", past: "gave", pastParticiple: "given", meaning: "주다", plant: "무궁화 🌸", flowerColor: "#BA68C8", distractorsPast: ["gived", "given", "gaves"], distractorsParticiple: ["gave", "gived", "giving"] },
+    { id: "write", base: "write", past: "wrote", pastParticiple: "written", meaning: "쓰다", plant: "민들레 🌼", flowerColor: "#FDD835", distractorsPast: ["writed", "written", "wroted"], distractorsParticiple: ["wrote", "writen", "writed"] },
+    { id: "run", base: "run", past: "ran", pastParticiple: "run", meaning: "달리다", plant: "나팔꽃 🪻", flowerColor: "#5C6BC0", distractorsPast: ["runned", "run", "rans"], distractorsParticiple: ["ran", "runned", "running"] },
+    { id: "sing", base: "sing", past: "sang", pastParticiple: "sung", meaning: "노래하다", plant: "백합 💮", flowerColor: "#81C784", distractorsPast: ["singed", "sung", "song"], distractorsParticiple: ["sang", "singed", "singing"] },
+    { id: "swim", base: "swim", past: "swam", pastParticiple: "swum", meaning: "수영하다", plant: "연꽃 🪷", flowerColor: "#F06292", distractorsPast: ["swimmed", "swum", "swamed"], distractorsParticiple: ["swam", "swimmed", "swimming"] },
+    { id: "make", base: "make", past: "made", pastParticiple: "made", meaning: "만들다", plant: "선인장 🌵", flowerColor: "#26A69A", distractorsPast: ["maked", "maken", "mades"], distractorsParticiple: ["maked", "maken", "making"] },
+    { id: "come", base: "come", past: "came", pastParticiple: "come", meaning: "오다", plant: "강낭콩 🌱", flowerColor: "#66BB6A", distractorsPast: ["comed", "came", "comes"], distractorsParticiple: ["came", "comed", "coming"] },
+    { id: "break", base: "break", past: "broke", pastParticiple: "broken", meaning: "부수다", plant: "봉선화 🌺", flowerColor: "#FF7043", distractorsPast: ["breaked", "broken", "broked"], distractorsParticiple: ["broke", "breaked", "breaking"] },
+    { id: "buy", base: "buy", past: "bought", pastParticiple: "bought", meaning: "사다", plant: "해바라기 🌻", flowerColor: "#FFB300", distractorsPast: ["buyed", "boughten", "baught"], distractorsParticiple: ["buyed", "boughten", "buying"] },
+    { id: "sleep", base: "sleep", past: "slept", pastParticiple: "slept", meaning: "자다", plant: "나팔꽃 🪻", flowerColor: "#7E57C2", distractorsPast: ["sleeped", "slepted", "sleepen"], distractorsParticiple: ["sleeped", "sleepen", "sleeping"] },
+    { id: "drink", base: "drink", past: "drank", pastParticiple: "drunk", meaning: "마시다", plant: "연꽃 🪷", flowerColor: "#42A5F5", distractorsPast: ["drinked", "drunk", "dranken"], distractorsParticiple: ["drank", "drinked", "drinking"] },
+    { id: "grow", base: "grow", past: "grew", pastParticiple: "grown", meaning: "자라다", plant: "강낭콩 🌱", flowerColor: "#43A047", distractorsPast: ["growed", "grown", "grewed"], distractorsParticiple: ["grew", "growed", "growing"] },
+    { id: "fly", base: "fly", past: "flew", pastParticiple: "flown", meaning: "날다", plant: "민들레 🌼", flowerColor: "#FFEE58", distractorsPast: ["flied", "flown", "flewed"], distractorsParticiple: ["flew", "flied", "flying"] },
+    { id: "draw", base: "draw", past: "drew", pastParticiple: "drawn", meaning: "그리다", plant: "무궁화 🌸", flowerColor: "#AB47BC", distractorsPast: ["drawed", "drawn", "drewed"], distractorsParticiple: ["drew", "drawed", "drawing"] },
+    { id: "know", base: "know", past: "knew", pastParticiple: "known", meaning: "알다", plant: "백합 💮", flowerColor: "#AED581", distractorsPast: ["knowed", "known", "knewed"], distractorsParticiple: ["knew", "knowed", "knowing"] },
+    { id: "speak", base: "speak", past: "spoke", pastParticiple: "spoken", meaning: "말하다", plant: "방울토마토 🍅", flowerColor: "#EF5350", distractorsPast: ["speaked", "spoken", "spoked"], distractorsParticiple: ["spoke", "speaked", "speaking"] }
+  ];
+
+  class GrowingVerbsApp {
+    constructor() {
+      this.verbs = [...VERBS_DATA];
+      this.plants = JSON.parse(localStorage.getItem('gyv_plants') || '[]');
+      this.mistakes = JSON.parse(localStorage.getItem('gyv_mistakes') || '[]');
+
+      this.sessionVerbs = [];
+      this.currentIndex = 0;
+      this.currentStage = 'SPROUT'; // SPROUT (past) or FLOWER (pastParticiple)
+      this.score = 0;
+      this.correctCount = 0;
+      this.autoTimer = null;
+
+      this.init();
+    }
+
+    init() {
+      this.updateHomeStats();
+      this.showHome();
+    }
+
+    showView(viewId) {
+      clearTimeout(this.autoTimer);
+      ['view-home', 'view-game', 'view-result', 'view-garden', 'view-review'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+      });
+      const target = document.getElementById(viewId);
+      if (target) target.classList.remove('hidden');
+      window.scrollTo(0, 0);
+    }
+
+    showHome() {
+      this.updateHomeStats();
+      this.showView('view-home');
+    }
+
+    showGarden() {
+      this.renderGarden();
+      this.showView('view-garden');
+    }
+
+    showReview() {
+      this.renderReview();
+      this.showView('view-review');
+    }
+
+    updateHomeStats() {
+      document.getElementById('home-plant-count').textContent = this.plants.length;
+      document.getElementById('home-mistake-count').textContent = this.mistakes.length;
+    }
+
+    speak(word) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(word);
+        u.lang = 'en-US';
+        u.rate = 0.9;
+        window.speechSynthesis.speak(u);
+      }
+    }
+
+    speakCurrentWord() {
+      const current = this.sessionVerbs[this.currentIndex];
+      if (!current) return;
+      const word = this.currentStage === 'SPROUT' ? current.past : current.pastParticiple;
+      this.speak(word);
+    }
+
+    startGame(isReview = false) {
+      if (isReview) {
+        if (this.mistakes.length === 0) {
+          alert('복습할 오답이 없습니다. 새로운 학습을 시작합니다!');
+          this.startGame(false);
+          return;
+        }
+        const mistakeIds = this.mistakes.map(m => m.id);
+        this.sessionVerbs = this.verbs.filter(v => mistakeIds.includes(v.id));
+      } else {
+        // Random 5 verbs
+        this.sessionVerbs = [...this.verbs].sort(() => 0.5 - Math.random()).slice(0, 5);
+      }
+
+      this.currentIndex = 0;
+      this.score = 0;
+      this.correctCount = 0;
+      this.currentStage = 'SPROUT';
+
+      this.showView('view-game');
+      this.renderCurrentQuestion();
+    }
+
+    startReviewSession() {
+      this.startGame(true);
+    }
+
+    renderCurrentQuestion() {
+      clearTimeout(this.autoTimer);
+      const current = this.sessionVerbs[this.currentIndex];
+      if (!current) return;
+
+      document.getElementById('game-progress').textContent = `동사 ${this.currentIndex + 1} / ${this.sessionVerbs.length}`;
+      document.getElementById('verb-base').textContent = current.base;
+      document.getElementById('verb-meaning').textContent = `${current.meaning} (${current.plant})`;
+      document.getElementById('step-base-word').textContent = current.base;
+
+      const feedback = document.getElementById('feedback-banner');
+      feedback.className = 'feedback-banner';
+      feedback.textContent = '';
+      document.getElementById('btn-next-step').classList.add('hidden');
+
+      if (this.currentStage === 'SPROUT') {
+        document.getElementById('plant-stage-badge').textContent = '1단계: 과거형 맞히기 (새싹 자라남 🌱)';
+        this.renderPlantSvg('SEED');
+        document.getElementById('step-past').className = 'step-item active';
+        document.getElementById('step-past-word').textContent = '?';
+        document.getElementById('step-participle').className = 'step-item';
+        document.getElementById('step-participle-word').textContent = '?';
+        document.getElementById('game-question-text').textContent = `'${current.base}'의 과거형을 골라주세요:`;
+        this.renderChoices(this.generateChoices(current.past, current.distractorsPast), current.past);
+      } else {
+        document.getElementById('plant-stage-badge').textContent = '2단계: 과거분사 맞히기 (꽃 활짝 피우기 🌸)';
+        this.renderPlantSvg('SPROUT');
+        document.getElementById('step-past').className = 'step-item completed';
+        document.getElementById('step-past-word').textContent = current.past;
+        document.getElementById('step-participle').className = 'step-item active';
+        document.getElementById('step-participle-word').textContent = '?';
+        document.getElementById('game-question-text').textContent = `'${current.base}'의 과거분사형을 골라주세요:`;
+        this.renderChoices(this.generateChoices(current.pastParticiple, current.distractorsParticiple), current.pastParticiple);
+      }
+    }
+
+    generateChoices(correct, distractors) {
+      const items = [correct, ...distractors.slice(0, 2)];
+      return [...new Set(items)].sort(() => 0.5 - Math.random());
+    }
+
+    renderChoices(choices, target) {
+      const container = document.getElementById('choices-container');
+      container.innerHTML = '';
+
+      choices.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        btn.innerHTML = `<span>${String.fromCharCode(65 + idx)}. ${opt}</span><span>➔</span>`;
+        btn.onclick = () => this.handleChoiceSelect(opt, target, btn);
+        container.appendChild(btn);
+      });
+    }
+
+    handleChoiceSelect(selected, target, btnElement) {
+      const current = this.sessionVerbs[this.currentIndex];
+      const isCorrect = selected.toLowerCase() === target.toLowerCase();
+      const feedback = document.getElementById('feedback-banner');
+
+      // Disable all choices
+      const allBtns = document.querySelectorAll('.choice-btn');
+      allBtns.forEach(b => b.disabled = true);
+
+      if (isCorrect) {
+        btnElement.classList.add('correct');
+        this.score += 10;
+        this.speak(selected);
+
+        if (this.currentStage === 'SPROUT') {
+          feedback.className = 'feedback-banner success';
+          feedback.textContent = `🎉 정답! 과거형 '${target}'을(를) 맞혀 새싹이 돋아났습니다! 🌱`;
+          this.renderPlantSvg('SPROUT');
+          document.getElementById('step-past-word').textContent = target;
+          document.getElementById('step-past').className = 'step-item completed';
+
+          const nextBtn = document.getElementById('btn-next-step');
+          nextBtn.classList.remove('hidden');
+          nextBtn.textContent = '다음 단계: 과거분사 꽃 피우기 🌸 ➔';
+
+          this.autoTimer = setTimeout(() => {
+            this.advanceStep();
+          }, 1200);
+        } else {
+          // Completed Flower!
+          this.correctCount++;
+          feedback.className = 'feedback-banner success';
+          feedback.textContent = `🌸 완벽해요! 과거분사 '${target}'까지 맞춰 꽃이 만개했습니다!`;
+          this.renderPlantSvg('FLOWER');
+          document.getElementById('step-participle-word').textContent = target;
+          document.getElementById('step-participle').className = 'step-item completed';
+
+          this.savePlant(current);
+
+          const nextBtn = document.getElementById('btn-next-step');
+          nextBtn.classList.remove('hidden');
+          nextBtn.textContent = '다음 문제로 이동 ➔';
+
+          this.autoTimer = setTimeout(() => {
+            this.advanceStep();
+          }, 1400);
+        }
+      } else {
+        btnElement.classList.add('wrong');
+        feedback.className = 'feedback-banner danger';
+        feedback.textContent = `💡 정답은 '${target}' 입니다!`;
+
+        this.recordMistake(current, this.currentStage);
+
+        const nextBtn = document.getElementById('btn-next-step');
+        nextBtn.classList.remove('hidden');
+        nextBtn.textContent = '정답 확인 후 다음으로 넘어가기 ➔';
+      }
+    }
+
+    advanceStep() {
+      clearTimeout(this.autoTimer);
+      if (this.currentStage === 'SPROUT') {
+        this.currentStage = 'FLOWER';
+        this.renderCurrentQuestion();
+      } else {
+        this.currentIndex++;
+        if (this.currentIndex < this.sessionVerbs.length) {
+          this.currentStage = 'SPROUT';
+          this.renderCurrentQuestion();
+        } else {
+          this.finishSession();
+        }
+      }
+    }
+
+    finishSession() {
+      document.getElementById('result-score').textContent = `${this.score}점`;
+      document.getElementById('result-correct-count').textContent = `${this.correctCount} / ${this.sessionVerbs.length}개`;
+      this.updateHomeStats();
+      this.showView('view-result');
+    }
+
+    savePlant(verb) {
+      if (!this.plants.some(p => p.id === verb.id)) {
+        this.plants.push({ ...verb, date: new Date().toLocaleDateString() });
+        localStorage.setItem('gyv_plants', JSON.stringify(this.plants));
+      }
+    }
+
+    recordMistake(verb, stage) {
+      if (!this.mistakes.some(m => m.id === verb.id)) {
+        this.mistakes.push({ ...verb, stage: stage });
+        localStorage.setItem('gyv_mistakes', JSON.stringify(this.mistakes));
+      }
+    }
+
+    clearMistakes() {
+      this.mistakes = [];
+      localStorage.removeItem('gyv_mistakes');
+      this.renderReview();
+      this.updateHomeStats();
+    }
+
+    renderGarden() {
+      const container = document.getElementById('garden-list');
+      container.innerHTML = '';
+      if (this.plants.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">아직 피워낸 식물이 없습니다.<br>동사 학습을 완료하여 꽃을 피워보세요! 🌱</div>';
+        return;
+      }
+
+      this.plants.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'list-card';
+        div.innerHTML = `
+          <div>
+            <div class="list-verb-title">${p.plant} (${p.base})</div>
+            <div class="list-verb-forms">${p.base} → ${p.past} → ${p.pastParticiple} (${p.meaning})</div>
+          </div>
+          <button class="btn-sound" onclick="app.speak('${p.base}, ${p.past}, ${p.pastParticiple}')">🔊 듣기</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    renderReview() {
+      const container = document.getElementById('review-list');
+      container.innerHTML = '';
+      if (this.mistakes.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">복습할 오답이 없습니다. 훌륭합니다! 👏</div>';
+        document.getElementById('btn-review-start').style.display = 'none';
+        return;
+      }
+
+      document.getElementById('btn-review-start').style.display = 'block';
+      this.mistakes.forEach(m => {
+        const div = document.createElement('div');
+        div.className = 'list-card';
+        div.innerHTML = `
+          <div>
+            <div class="list-verb-title">${m.base} (${m.meaning})</div>
+            <div class="list-verb-forms">과거형: <b>${m.past}</b> / 과거분사: <b>${m.pastParticiple}</b></div>
+          </div>
+          <button class="btn-sound" onclick="app.speak('${m.base}, ${m.past}, ${m.pastParticiple}')">🔊 듣기</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    renderPlantSvg(stage) {
+      const container = document.getElementById('plant-svg-container');
+      const verb = this.sessionVerbs[this.currentIndex] || { flowerColor: '#4CAF50' };
+      const color = verb.flowerColor || '#4CAF50';
+
+      if (stage === 'SEED') {
+        container.innerHTML = `
+          <svg width="100" height="90" viewBox="0 0 100 90">
+            <!-- Soil -->
+            <ellipse cx="50" cy="80" rx="35" ry="6" fill="#8D6E63" />
+            <!-- Seed -->
+            <ellipse cx="50" cy="72" rx="9" ry="6" fill="#6D4C41" transform="rotate(-15 50 72)"/>
+            <path d="M 45 70 Q 50 63 52 73" stroke="#A1887F" stroke-width="1.5" fill="none"/>
+          </svg>
+        `;
+      } else if (stage === 'SPROUT') {
+        container.innerHTML = `
+          <svg width="100" height="90" viewBox="0 0 100 90">
+            <!-- Soil -->
+            <ellipse cx="50" cy="82" rx="35" ry="6" fill="#8D6E63" />
+            <!-- Stem -->
+            <path d="M 50 80 Q 48 60 50 48" stroke="#4CAF50" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <!-- Leaves -->
+            <path d="M 50 55 Q 32 46 38 60 Q 46 60 50 55" fill="#66BB6A"/>
+            <path d="M 50 50 Q 68 40 62 55 Q 54 55 50 50" fill="#81C784"/>
+          </svg>
+        `;
+      } else {
+        // FLOWER
+        container.innerHTML = `
+          <svg width="110" height="95" viewBox="0 0 110 95">
+            <!-- Soil -->
+            <ellipse cx="55" cy="85" rx="38" ry="6" fill="#8D6E63" />
+            <!-- Stem -->
+            <path d="M 55 85 Q 54 58 55 42" stroke="#388E3C" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+            <!-- Leaves -->
+            <path d="M 55 64 Q 32 58 38 72 Q 48 72 55 64" fill="#4CAF50"/>
+            <path d="M 55 56 Q 78 48 72 65 Q 62 65 55 56" fill="#66BB6A"/>
+            <!-- Flower Petals -->
+            <circle cx="55" cy="30" r="9" fill="${color}" opacity="0.95"/>
+            <circle cx="43" cy="38" r="9" fill="${color}" opacity="0.95"/>
+            <circle cx="67" cy="38" r="9" fill="${color}" opacity="0.95"/>
+            <circle cx="47" cy="50" r="9" fill="${color}" opacity="0.95"/>
+            <circle cx="63" cy="50" r="9" fill="${color}" opacity="0.95"/>
+            <!-- Center Core -->
+            <circle cx="55" cy="41" r="7" fill="#FFEB3B"/>
+          </svg>
+        `;
+      }
+    }
+  }
+
+  const app = new GrowingVerbsApp();
+</script>
+
+</body>
+</html>

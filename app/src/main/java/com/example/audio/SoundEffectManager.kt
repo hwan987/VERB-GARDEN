@@ -39,38 +39,26 @@ class SoundEffectManager {
     private val tapClickBuffer: ShortArray by lazy { generateTapSound() }
 
     /**
-     * 버튼 클릭이나 카드 터치 시 나는 귀여운 물방울 뾱 소리
+     * 효과음 제거 요청에 따라 모든 효과음 출력을 무음 처리합니다.
      */
     fun playPop() {
-        playSoundBuffer(popSoundBuffer)
+        // Muted (효과음 제거)
     }
 
-    /**
-     * 정답 맞혔을 때 맑고 기분 좋은 오르골 3화음 (도-미-솔 띠로롱~)
-     */
     fun playCorrect() {
-        playSoundBuffer(correctChimeBuffer)
+        // Muted (효과음 제거)
     }
 
-    /**
-     * 식물이 쑥쑥 자라거나 꽃이 활짝 피었을 때 "짜잔!" 반짝이는 마법 팡파르
-     */
     fun playTadaBloom() {
-        playSoundBuffer(tadaBloomBuffer)
+        // Muted (효과음 제거)
     }
 
-    /**
-     * 오답 선택 시 실망스럽지 않고 귀여운 "오잉~?" 소리
-     */
     fun playWrong() {
-        playSoundBuffer(wrongBoingBuffer)
+        // Muted (효과음 제거)
     }
 
-    /**
-     * 경쾌한 탭 소리
-     */
     fun playTap() {
-        playSoundBuffer(tapClickBuffer)
+        // Muted (효과음 제거)
     }
 
     private fun playSoundBuffer(buffer: ShortArray) {
