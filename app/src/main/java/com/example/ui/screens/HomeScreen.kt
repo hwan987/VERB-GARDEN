@@ -7,6 +7,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import androidx.compose.material.icons.filled.Eco
 import androidx.compose.material.icons.filled.HistoryEdu
 import androidx.compose.material.icons.filled.LocalFlorist
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material.icons.filled.Yard
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -71,20 +73,10 @@ fun HomeScreen(
     onOpenGarden: () -> Unit,
     onOpenReview: () -> Unit,
     onPlayPopSound: () -> Unit = {},
+    onTestSound: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
-
-    val infiniteTransition = rememberInfiniteTransition(label = "homePlantPulse")
-    val buttonPulse by infiniteTransition.animateFloat(
-        initialValue = 1.0f,
-        targetValue = 1.04f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1200, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "btnPulse"
-    )
 
     Box(
         modifier = modifier
@@ -103,7 +95,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
-                .padding(horizontal = 24.dp, vertical = 20.dp),
+                .padding(horizontal = 20.dp, vertical = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
@@ -112,59 +104,91 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(6.dp))
 
                 // App Logo / Animated Hero Plant
                 Surface(
                     shape = CircleShape,
                     color = Color(0xFFC8E6C9),
-                    modifier = Modifier.size(110.dp),
-                    tonalElevation = 4.dp
+                    modifier = Modifier.size(90.dp),
+                    tonalElevation = 3.dp
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         PlantGrowthGraphic(
                             stage = PlantStage.FLOWER,
                             flowerType = FlowerType.SUNFLOWER,
-                            modifier = Modifier.scale(0.68f)
+                            modifier = Modifier.scale(0.60f)
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
                     text = "Growing Your Verbs",
                     fontFamily = FredokaFontFamily,
-                    fontSize = 30.sp,
+                    fontSize = 26.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF1B5E20),
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
                     text = "동사 식물을 키우며 배우는 영어 불규칙 동사!",
-                    fontSize = 14.sp,
+                    fontSize = 13.sp,
                     color = Color(0xFF388E3C),
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Medium
                 )
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+                // 소리 테스트 버튼 (스피커/이어폰 볼륨 및 오디오 출력 점검용)
+                Surface(
+                    shape = RoundedCornerShape(12.dp),
+                    color = Color(0xFFE8F5E9),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFA5D6A7)),
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .clickable { onTestSound() }
+                        .testTag("test_sound_button")
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.VolumeUp,
+                            contentDescription = "소리 테스트",
+                            tint = Color(0xFF2E7D32),
+                            modifier = Modifier.size(15.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = "🔊 소리 테스트 (터치)",
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF1B5E20)
+                        )
+                    }
+                }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(14.dp))
 
             // Garden Status & Mini Preview Card
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("garden_preview_card"),
-                shape = RoundedCornerShape(22.dp),
+                shape = RoundedCornerShape(18.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Column(
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.padding(12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Row(
@@ -177,40 +201,40 @@ fun HomeScreen(
                                 imageVector = Icons.Default.LocalFlorist,
                                 contentDescription = null,
                                 tint = Color(0xFFE91E63),
-                                modifier = Modifier.size(22.dp)
+                                modifier = Modifier.size(20.dp)
                             )
                             Spacer(modifier = Modifier.width(6.dp))
                             Text(
                                 text = "나의 정원 미리보기",
                                 fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp,
+                                fontSize = 15.sp,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                         }
 
                         // Completed plants count badge
                         Surface(
-                            shape = RoundedCornerShape(12.dp),
+                            shape = RoundedCornerShape(10.dp),
                             color = Color(0xFFE8F5E9)
                         ) {
                             Text(
-                                text = "완성한 식물: ${plantCount}그루",
+                                text = "완성: ${plantCount}그루",
                                 color = Color(0xFF2E7D32),
                                 fontWeight = FontWeight.Bold,
-                                fontSize = 13.sp,
-                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                                fontSize = 12.sp,
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                             )
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
 
                     if (plants.isEmpty()) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(90.dp)
-                                .clip(RoundedCornerShape(14.dp))
+                                .height(72.dp)
+                                .clip(RoundedCornerShape(12.dp))
                                 .background(Color(0xFFF9FBE7)),
                             contentAlignment = Alignment.Center
                         ) {
@@ -219,12 +243,12 @@ fun HomeScreen(
                                     imageVector = Icons.Default.Eco,
                                     contentDescription = null,
                                     tint = Color(0xFF81C784),
-                                    modifier = Modifier.size(32.dp)
+                                    modifier = Modifier.size(26.dp)
                                 )
-                                Spacer(modifier = Modifier.height(4.dp))
+                                Spacer(modifier = Modifier.height(2.dp))
                                 Text(
                                     text = "첫 번째 동사 씨앗을 심고 꽃을 피워보세요!",
-                                    fontSize = 13.sp,
+                                    fontSize = 12.sp,
                                     color = Color(0xFF558B2F),
                                     fontWeight = FontWeight.Medium
                                 )
@@ -232,8 +256,8 @@ fun HomeScreen(
                         }
                     } else {
                         LazyRow(
-                            horizontalArrangement = Arrangement.spacedBy(10.dp),
-                            contentPadding = PaddingValues(vertical = 4.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            contentPadding = PaddingValues(vertical = 2.dp),
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             items(plants.take(6)) { plant ->
@@ -246,7 +270,7 @@ fun HomeScreen(
                                     verbBase = plant.base,
                                     meaningKo = plant.meaningKo,
                                     completedCount = plant.timesCompleted,
-                                    modifier = Modifier.width(105.dp)
+                                    modifier = Modifier.width(100.dp)
                                 )
                             }
                         }
@@ -254,9 +278,9 @@ fun HomeScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(28.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-            // Center Action: [학습 시작] Button (Large, prominent, inviting)
+            // Center Action: [학습 시작] Button
             Button(
                 onClick = {
                     onPlayPopSound()
@@ -264,15 +288,14 @@ fun HomeScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth(0.92f)
-                    .height(64.dp)
-                    .scale(buttonPulse)
+                    .height(54.dp)
                     .testTag("start_learning_button"),
-                shape = RoundedCornerShape(32.dp),
+                shape = RoundedCornerShape(28.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF2E7D32),
                     contentColor = Color.White
                 ),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 3.dp)
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -281,23 +304,23 @@ fun HomeScreen(
                     Icon(
                         imageVector = Icons.Default.PlayArrow,
                         contentDescription = null,
-                        modifier = Modifier.size(28.dp)
+                        modifier = Modifier.size(24.dp)
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = "학습 시작 (10문제)",
-                        fontSize = 20.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(28.dp))
+            Spacer(modifier = Modifier.height(14.dp))
 
             // Bottom Navigation Buttons: [나의 정원] & [복습하기]
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 OutlinedButton(
                     onClick = {
@@ -306,9 +329,9 @@ fun HomeScreen(
                     },
                     modifier = Modifier
                         .weight(1f)
-                        .height(54.dp)
+                        .height(48.dp)
                         .testTag("my_garden_button"),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
                         containerColor = MaterialTheme.colorScheme.surface
                     )
@@ -317,12 +340,12 @@ fun HomeScreen(
                         imageVector = Icons.Default.Yard,
                         contentDescription = null,
                         tint = Color(0xFF388E3C),
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(18.dp)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = "나의 정원",
-                        fontSize = 15.sp,
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF2E7D32)
                     )
@@ -335,9 +358,9 @@ fun HomeScreen(
                     },
                     modifier = Modifier
                         .weight(1f)
-                        .height(54.dp)
+                        .height(48.dp)
                         .testTag("review_button"),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
                         containerColor = MaterialTheme.colorScheme.surface
                     )

@@ -118,7 +118,8 @@ fun GrowingVerbsApp(viewModel: VerbViewModel) {
                     onStartGame = { viewModel.startNewGame() },
                     onOpenGarden = { viewModel.navigateTo(AppScreen.GARDEN) },
                     onOpenReview = { viewModel.navigateTo(AppScreen.REVIEW) },
-                    onPlayPopSound = { viewModel.playPopSound() }
+                    onPlayPopSound = { viewModel.playPopSound() },
+                    onTestSound = { viewModel.testSound() }
                 )
             }
 

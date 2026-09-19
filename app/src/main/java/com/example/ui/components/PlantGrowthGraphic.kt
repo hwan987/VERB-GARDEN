@@ -80,88 +80,42 @@ fun PlantGrowthGraphic(
     isCelebrating: Boolean = false,
     modifier: Modifier = Modifier
 ) {
-    val infiniteTransition = rememberInfiniteTransition(label = "plantAnimation")
-
-    // 바람에 살랑거리는 자연스러운 움직임
-    val swayOffset by infiniteTransition.animateFloat(
-        initialValue = -3.5f,
-        targetValue = 3.5f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1500, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "sway"
-    )
-
-    // 말할 때/성장할 때 리듬감 있는 펄스
-    val pulseScale by infiniteTransition.animateFloat(
-        initialValue = 1.0f,
-        targetValue = if (isSpeaking) 1.08f else 1.02f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(if (isSpeaking) 420 else 1400, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "pulse"
-    )
-
-    // 반짝이는 축하 파티클 회전
-    val sparkleAngle by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(6000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "sparkleRotation"
-    )
-
-    // 정답을 맞혔을 때 "짜잔!" 하고 자라나는 탄성 바운스 스케일 (Spring Animation)
-    var triggerBounce by remember(stage, isCelebrating) { mutableStateOf(false) }
-    val tadaBounceScale by animateFloatAsState(
-        targetValue = if (isCelebrating) 1.15f else 1.0f,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessLow
-        ),
-        label = "tadaBounce"
-    )
-
+    // 불필요한 무한 루프 애니메이션을 제거하여 앱을 가볍고 배터리/용량 부담 없이 유지합니다.
     Column(
         modifier = modifier
             .fillMaxWidth()
             .testTag("plant_growth_graphic"),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Graphic Canvas Box
+        // Graphic Canvas Box (컴팩트 사이즈로 축소하여 위아래 잘림 방지)
         Box(
             modifier = Modifier
-                .size(200.dp)
-                .scale(tadaBounceScale * pulseScale),
+                .size(130.dp),
             contentAlignment = Alignment.Center
         ) {
-            // 1. 따스한 햇살 & 오라 효과 (Background Aura)
+            // 1. 온화한 은은한 배경 오라
             Canvas(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .height(130.dp)
             ) {
                 val center = Offset(size.width / 2, size.height * 0.52f)
                 val auraColors = if (stage == PlantStage.FLOWER) {
                     listOf(
-                        flowerType.primaryColor.copy(alpha = 0.28f),
-                        Color(0x33FFE082),
+                        flowerType.primaryColor.copy(alpha = 0.22f),
+                        Color(0x22FFE082),
                         Color.Transparent
                     )
                 } else if (stage == PlantStage.SPROUT) {
                     listOf(
-                        Color(0x40A5D6A7),
-                        Color(0x20FFF59D),
+                        Color(0x30A5D6A7),
+                        Color(0x15FFF59D),
                         Color.Transparent
                     )
                 } else {
                     listOf(
-                        Color(0x30FFE082),
-                        Color(0x15A5D6A7),
+                        Color(0x25FFE082),
+                        Color(0x10A5D6A7),
                         Color.Transparent
                     )
                 }
@@ -170,33 +124,16 @@ fun PlantGrowthGraphic(
                     brush = Brush.radialGradient(
                         colors = auraColors,
                         center = center,
-                        radius = size.width * 0.52f
+                        radius = size.width * 0.50f
                     ),
-                    radius = size.width * 0.52f,
+                    radius = size.width * 0.50f,
                     center = center
                 )
-
-                // 짜잔 축하 이펙트: 꽃가루/별빛 파티클 8개 방사
-                if (isCelebrating || stage == PlantStage.FLOWER) {
-                    val particleCount = 10
-                    for (i in 0 until particleCount) {
-                        val baseRad = Math.toRadians((i * (360.0 / particleCount) + sparkleAngle).toDouble())
-                        val dist = size.width * 0.42f
-                        val px = center.x + (cos(baseRad) * dist).toFloat()
-                        val py = center.y + (sin(baseRad) * dist).toFloat()
-
-                        drawCircle(
-                            color = if (i % 2 == 0) Color(0xFFFFD54F) else flowerType.primaryColor,
-                            radius = if (i % 3 == 0) 5f else 3.5f,
-                            center = Offset(px, py)
-                        )
-                    }
-                }
             }
 
             // 2. 메인 식물 렌더링 캔버스 (화분, 줄기, 잎, 꽃)
             Canvas(
-                modifier = Modifier.size(190.dp)
+                modifier = Modifier.size(130.dp)
             ) {
                 val w = size.width
                 val h = size.height
@@ -281,7 +218,7 @@ fun PlantGrowthGraphic(
                         // 2단계: 새싹 (쑥쑥 자라난 줄기와 마주 보는 떡잎/본잎)
                         val stemBottomX = w / 2
                         val stemBottomY = potTopY - 4f
-                        val stemTopX = w / 2 + swayOffset
+                        val stemTopX = w / 2
                         val stemTopY = h * 0.40f
 
                         // 튼튼한 연녹색 줄기
@@ -345,7 +282,7 @@ fun PlantGrowthGraphic(
                         // 3단계: 만개한 꽃 (초등 과학 연계 식물의 고유한 아름다운 꽃)
                         val stemBottomX = w / 2
                         val stemBottomY = potTopY - 4f
-                        val stemTopX = w / 2 + swayOffset * 0.7f
+                        val stemTopX = w / 2
                         val flowerCenterY = h * 0.28f
 
                         // 높은 줄기

@@ -56,8 +56,8 @@ data class GameSessionState(
 class VerbViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: VerbRepository
-    val ttsManager: TtsManager = TtsManager(application)
-    val soundEffectManager: SoundEffectManager = SoundEffectManager()
+    val soundEffectManager: SoundEffectManager = SoundEffectManager(application)
+    val ttsManager: TtsManager = TtsManager(application, soundEffectManager)
 
     init {
         val db = AppDatabase.getInstance(application)
@@ -217,7 +217,7 @@ class VerbViewModel(application: Application) : AndroidViewModel(application) {
             val nextScore = state.score + 10
 
             if (state.stage == PlantStage.SPROUT) {
-                // Correct past form! Play cute chime, reveal past form, growth to sprout
+                // Correct past form! Reveal past form, growth to sprout
                 soundEffectManager.playCorrect()
                 _sessionState.value = state.copy(
                     selectedChoice = choice,
@@ -226,14 +226,9 @@ class VerbViewModel(application: Application) : AndroidViewModel(application) {
                     isPastRevealed = true,
                     isWaitingForNext = true
                 )
-
-                // Smooth auto-advance after 1.1s so the user sees the sprout grow!
-                autoAdvanceJob = viewModelScope.launch {
-                    delay(1150)
-                    advanceToNextStep()
-                }
+                // 자동 넘김을 제거하여 사용자가 발음을 다시 듣거나 확인할 수 있도록 유지합니다.
             } else {
-                // Correct past participle form! Play bloom fanfare, flower blooms!
+                // Correct past participle form! Flower blooms!
                 soundEffectManager.playTadaBloom()
                 val newlyCompleted = state.completedVerbs + current
                 val newCorrectCount = if (!state.hadMistakeOnCurrentVerb) state.correctCount + 1 else state.correctCount
@@ -251,12 +246,7 @@ class VerbViewModel(application: Application) : AndroidViewModel(application) {
                     isParticipleRevealed = true,
                     isWaitingForNext = true
                 )
-
-                // Smooth auto-advance to next verb after 1.4s so user can enjoy full bloom!
-                autoAdvanceJob = viewModelScope.launch {
-                    delay(1400)
-                    advanceToNextStep()
-                }
+                // 자동 넘김을 제거하여 사용자가 발음을 다시 듣거나 전체 3단 변화를 확인하고 넘어갈 수 있습니다.
             }
         } else {
             // Incorrect answer! Play gentle wrong boing sound
@@ -333,7 +323,8 @@ class VerbViewModel(application: Application) : AndroidViewModel(application) {
                 )
                 playPronunciationForCurrentStage()
             } else {
-                // Game finished!
+                // Game finished! Play celebratory fanfare
+                soundEffectManager.playTadaBloom()
                 _sessionState.value = state.copy(
                     isSessionComplete = true,
                     isWaitingForNext = false
@@ -397,6 +388,18 @@ class VerbViewModel(application: Application) : AndroidViewModel(application) {
 
     fun playTapSound() {
         soundEffectManager.playTap()
+    }
+
+    /**
+     * 사용자가 홈 화면에서 소리 출력을 즉시 확인해볼 수 있는 테스트 기능입니다.
+     * 효과음과 영어 음성("Hello! Growing Verbs")을 연속 재생합니다.
+     */
+    fun testSound() {
+        soundEffectManager.playTadaBloom()
+        viewModelScope.launch {
+            delay(400)
+            ttsManager.speak("Growing Verbs")
+        }
     }
 
     override fun onCleared() {
